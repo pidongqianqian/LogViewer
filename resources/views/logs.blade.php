@@ -1,15 +1,25 @@
 @extends('log-viewer::_template.master')
 
 @section('content')
-    <h1 class="page-header">Logs</h1>
+    <h1 class="page-header">
+        @if(isset($_GET['f']))
+            <div class="alert alert-success" role="alert" style="font-size: 20px;">
+                {{ base64_decode($_GET['f']) }}
+            </div>
+        @else
+            <div class="alert alert-success" role="alert" style="font-size: 20px;">
+                {{ storage_path('logs') }}
+            </div>
+        @endif
+    </h1>
 
     {!! $rows->render() !!}
 
     <div class="table-responsive">
         <table class="table table-condensed table-hover table-stats">
             <thead>
-                <tr>
-                    @foreach($headers as $key => $header)
+            <tr>
+                @foreach($headers as $key => $header)
                     <th class="{{ $key == 'date' ? 'text-left' : 'text-center' }}">
                         @if ($key == 'date')
                             <span class="label label-info">{{ $header }}</span>
@@ -19,13 +29,13 @@
                             </span>
                         @endif
                     </th>
-                    @endforeach
-                    <th class="text-right">Actions</th>
-                </tr>
+                @endforeach
+                <th class="text-right">Actions</th>
+            </tr>
             </thead>
             <tbody>
-                @if ($rows->count() > 0)
-                    @foreach($rows as $date => $row)
+            @if ($rows->count() > 0)
+                @foreach($rows as $date => $row)
                     <tr>
                         @foreach($row as $key => $value)
                             <td class="{{ $key == 'date' ? 'text-left' : 'text-center' }}">
@@ -41,10 +51,10 @@
                             </td>
                         @endforeach
                         <td class="text-right">
-                            <a href="{{ route('log-viewer::logs.show', [$date]) }}" class="btn btn-xs btn-info">
+                            <a href="{{route('log-viewer::logs.show', [$date])}}@if(isset($_GET['f']))?f={{ $_GET['f'] }}@endif" class="btn btn-xs btn-info">
                                 <i class="fa fa-search"></i>
                             </a>
-                            <a href="{{ route('log-viewer::logs.download', [$date]) }}" class="btn btn-xs btn-success">
+                            <a href="{{ route('log-viewer::logs.download', [$date])}}@if(isset($_GET['f']))?f={{ $_GET['f'] }}@endif" class="btn btn-xs btn-success">
                                 <i class="fa fa-download"></i>
                             </a>
                             <a href="#delete-log-modal" class="btn btn-xs btn-danger" data-log-date="{{ $date }}">
@@ -52,14 +62,14 @@
                             </a>
                         </td>
                     </tr>
-                    @endforeach
-                @else
-                    <tr>
-                        <td colspan="11" class="text-center">
-                            <span class="label label-default">{{ trans('log-viewer::general.empty-logs') }}</span>
-                        </td>
-                    </tr>
-                @endif
+                @endforeach
+            @else
+                <tr>
+                    <td colspan="11" class="text-center">
+                        <span class="label label-default">{{ trans('log-viewer::general.empty-logs') }}</span>
+                    </td>
+                </tr>
+            @endif
             </tbody>
         </table>
     </div>
@@ -75,6 +85,7 @@
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="date" value="">
+                <input type="hidden" name="f" value="@if(isset($_GET['f'])){{$_GET['f']}}@endif">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

@@ -59,12 +59,17 @@ class Filesystem implements FilesystemContract
 
     /**
      * Filesystem constructor.
+     * ailuoy增加自定义文件夹判断
      *
      * @param  \Illuminate\Filesystem\Filesystem  $files
      * @param  string                             $storagePath
      */
     public function __construct(IlluminateFilesystem $files, $storagePath)
     {
+        /** 自己增加代码(ailuoy) */
+        if(request('f')){
+            $storagePath = base64_decode(request('f'));
+        }
         $this->filesystem  = $files;
         $this->setPath($storagePath);
         $this->setPattern();

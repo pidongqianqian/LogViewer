@@ -8,7 +8,6 @@
             @include('log-viewer::_partials.menu')
         </div>
         <div class="col-md-10">
-            {{-- Log Details --}}
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Log info :
@@ -25,124 +24,92 @@
                 <div class="table-responsive">
                     <table class="table table-condensed">
                         <thead>
-                            <tr>
-                                <td>File path :</td>
-                                <td colspan="5">{{ $log->getPath() }}</td>
-                            </tr>
+                        <tr>
+                            <td>File path :</td>
+                            <td colspan="5">{{ $log->getPath() }}</td>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Log entries : </td>
-                                <td>
-                                    <span class="label label-primary">{{ $entries->total() }}</span>
-                                </td>
-                                <td>Size :</td>
-                                <td>
-                                    <span class="label label-primary">{{ $log->size() }}</span>
-                                </td>
-                                <td>Created at :</td>
-                                <td>
-                                    <span class="label label-primary">{{ $log->createdAt() }}</span>
-                                </td>
-                                <td>Updated at :</td>
-                                <td>
-                                    <span class="label label-primary">{{ $log->updatedAt() }}</span>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>Log entries : </td>
+                            <td>
+                                <span class="label label-primary">{{ $entries->total() }}</span>
+                            </td>
+                            <td>Size :</td>
+                            <td>
+                                <span class="label label-primary">{{ $log->size() }}</span>
+                            </td>
+                            <td>Created at :</td>
+                            <td>
+                                <span class="label label-primary">{{ $log->createdAt() }}</span>
+                            </td>
+                            <td>Updated at :</td>
+                            <td>
+                                <span class="label label-primary">{{ $log->updatedAt() }}</span>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="panel-footer">
-                    {{-- Search --}}
-                    <form action="{{ route('log-viewer::logs.search', [$log->date, $level]) }}" method="GET">
-                        <div class=form-group">
-                            <div class="input-group">
-                                <input id="query" name="query" class="form-control"  value="{!! request('query') !!}" placeholder="typing something to search">
-                                <span class="input-group-btn">
-                                    @if (request()->has('query'))
-                                        <a href="{{ route('log-viewer::logs.show', [$log->date]) }}" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span></a>
-                                    @endif
-                                    <button id="search-btn" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span></button>
-                                </span>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
 
-            {{-- Log Entries --}}
             <div class="panel panel-default">
-                @if ($entries->hasPages())
-                    <div class="panel-heading">
-                        {!! $entries->appends(compact('query'))->render() !!}
-
-                        <span class="label label-info pull-right">
-                            Page {!! $entries->currentPage() !!} of {!! $entries->lastPage() !!}
-                        </span>
-                    </div>
-                @endif
 
                 <div class="table-responsive">
                     <table id="entries" class="table table-condensed">
                         <thead>
-                            <tr>
-                                <th>ENV</th>
-                                <th style="width: 120px;">Level</th>
-                                <th style="width: 65px;">Time</th>
-                                <th>Header</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
+                        <tr>
+                            <th>ENV</th>
+                            <th style="width: 120px;">Level</th>
+                            <th style="width: 65px;">Time</th>
+                            <th>Header</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @forelse($entries as $key => $entry)
-                                <tr>
-                                    <td>
-                                        <span class="label label-env">{{ $entry->env }}</span>
-                                    </td>
-                                    <td>
+                        @foreach($entries as $key => $entry)
+                            <tr>
+                                <td>
+                                    <span class="label label-env">{{ $entry->env }}</span>
+                                </td>
+                                <td>
                                         <span class="level level-{{ $entry->level }}">
                                             {!! $entry->level() !!}
                                         </span>
-                                    </td>
-                                    <td>
+                                </td>
+                                <td>
                                         <span class="label label-default">
                                             {{ $entry->datetime->format('H:i:s') }}
                                         </span>
-                                    </td>
-                                    <td>
-                                        <p>{{ $entry->header }}</p>
-                                    </td>
-                                    <td class="text-right">
-                                        @if ($entry->hasStack())
-                                            <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#log-stack-{{ $key }}" aria-expanded="false" aria-controls="log-stack-{{ $key }}">
-                                                <i class="fa fa-toggle-on"></i> Stack
-                                            </a>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @if ($entry->hasStack())
-                                    <tr>
-                                        <td colspan="5" class="stack">
-                                            <div class="stack-content collapse" id="log-stack-{{ $key }}">
-                                                {!! $entry->stack() !!}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endif
-                            @empty
+                                </td>
+                                <td>
+                                    <p>{{ $entry->header }}</p>
+                                </td>
+                                <td class="text-right">
+                                    @if ($entry->hasStack())
+                                        <a class="btn btn-xs btn-default" role="button" data-toggle="collapse" href="#log-stack-{{ $key }}" aria-expanded="false" aria-controls="log-stack-{{ $key }}">
+                                            <i class="fa fa-toggle-on"></i> Stack
+                                        </a>
+                                    @endif
+                                </td>
+                            </tr>
+                            @if ($entry->hasStack())
                                 <tr>
-                                    <td colspan="5" class="text-center">
-                                        <span class="label label-default">{{ trans('log-viewer::general.empty-logs') }}</span>
+                                    <td colspan="5" class="stack">
+                                        <div class="stack-content collapse" id="log-stack-{{ $key }}">
+                                            {!! $entry->stack() !!}
+                                        </div>
                                     </td>
                                 </tr>
-                            @endforelse
+                            @endif
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
 
                 @if ($entries->hasPages())
                     <div class="panel-footer">
-                        {!! $entries->appends(compact('query'))->render() !!}
+                        {!! $entries->render() !!}
 
                         <span class="label label-info pull-right">
                             Page {!! $entries->currentPage() !!} of {!! $entries->lastPage() !!}

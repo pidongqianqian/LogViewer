@@ -135,4 +135,7 @@ return [
         '^Stack trace:',
     ],
 
+    /** 后台中间件的名称,false代表不做任何权限 */
+    'middleware'=>false
+
 ];

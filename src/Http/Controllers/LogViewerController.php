@@ -287,4 +287,19 @@ class LogViewerController extends Controller
 
         return $percents;
     }
+
+    /**
+     * 自己定义的查看目录[ailuoy]
+     */
+    public function folder ()
+    {
+        $files = glob(config('log-viewer.storage-path').'/*');
+        $files = array_reverse($files, 'is_file');
+        $files = array_filter($files, 'is_dir');
+        $folders = [];
+        foreach ($files as $file){
+            $folders[basename($file)] = $file;
+        }
+        return view('vendor.log-viewer.folder',compact('folders'));
+    }
 }
