@@ -23,6 +23,11 @@
                         <i class="fa fa-archive"></i> Logs
                     </a>
                 </li>
+                <li class="{{ Route::is('log-viewer::folder') ? 'active' : '' }}">
+                    <a href="{{ route('log-viewer::folder') }}">
+                        <i class="fa fa-archive"></i> Folders
+                    </a>
+                </li>
             </ul>
         </div>
     </div>
