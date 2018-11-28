@@ -125,4 +125,13 @@ interface Filesystem extends Patternable
      * @return string
      */
     public function path($date);
+
+    /**
+     * Get the log file name.
+     *
+     * @param  string  $date
+     *
+     * @return string
+     */
+    public function filename($date);
 }

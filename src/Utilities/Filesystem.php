@@ -66,10 +66,6 @@ class Filesystem implements FilesystemContract
      */
     public function __construct(IlluminateFilesystem $files, $storagePath)
     {
-        /** 自己增加代码(ailuoy) */
-        if(request('f')){
-            $storagePath = base64_decode(request('f'));
-        }
         $this->filesystem  = $files;
         $this->setPath($storagePath);
         $this->setPattern();
@@ -276,6 +272,18 @@ class Filesystem implements FilesystemContract
     public function path($date)
     {
         return $this->getLogPath($date);
+    }
+
+    /**
+     * Get the log file name.
+     *
+     * @param  string  $date
+     *
+     * @return string
+     */
+    public function filename($date)
+    {
+        return $this->prefixPattern . $date . $this->extension;
     }
 
     /* -----------------------------------------------------------------

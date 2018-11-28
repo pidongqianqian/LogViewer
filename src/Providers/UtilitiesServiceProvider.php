@@ -98,11 +98,21 @@ class UtilitiesServiceProvider extends ServiceProvider
              * @var  \Illuminate\Config\Repository      $config
              * @var  \Illuminate\Filesystem\Filesystem  $files
              */
-            $config     = $app['config'];
-            $files      = $app['files'];
-            $filesystem = new Utilities\Filesystem($files, $config->get('log-viewer.storage-path'));
+            $config      = $app['config'];
+            $files       = $app['files'];
+            /**
+             * pidong modify
+             */
+            $storagePath = request('f')
+                ? base64_decode(request('f'))
+                : $config->get('log-viewer.storage-path');
+            $pathArr = explode('/', $storagePath);
 
-            $pattern = $config->get('log-viewer.pattern', []);
+            $patternAll = $config->get('log-viewer.pattern', []);
+            $pattern = end($pathArr) && isset($patternAll[end($pathArr)])
+                ? $patternAll[end($pathArr)]
+                : $patternAll['default'];
+            $filesystem = new Utilities\Filesystem($files, $storagePath);
 
             $filesystem->setPattern(
                 Arr::get($pattern, 'prefix',    Utilities\Filesystem::PATTERN_PREFIX),

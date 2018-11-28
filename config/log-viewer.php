@@ -17,9 +17,16 @@ return [
      */
 
     'pattern'       => [
-        'prefix'    => Filesystem::PATTERN_PREFIX,    // 'laravel-'
-        'date'      => Filesystem::PATTERN_DATE,      // '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
-        'extension' => Filesystem::PATTERN_EXTENSION, // '.log'
+        'default' => [
+            'prefix'    => Filesystem::PATTERN_PREFIX,    // 'laravel-'
+            'date'      => Filesystem::PATTERN_DATE,      // '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+            'extension' => Filesystem::PATTERN_EXTENSION, // '.log'
+        ],
+        'ftp'  => [
+            'prefix'    => 'ftp-',    // 'laravel-'
+            'date'      => Filesystem::PATTERN_DATE,      // '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+            'extension' => Filesystem::PATTERN_EXTENSION, // '.log'
+        ]
     ],
 
     /* -----------------------------------------------------------------
@@ -53,7 +60,7 @@ return [
      |  This defines how many log entries are displayed per page.
      */
 
-    'per-page'      => 30,
+    'per-page'      => 3,
 
     /* -----------------------------------------------------------------
      |  LogViewer's Facade
@@ -134,8 +141,5 @@ return [
         '^#\d+',
         '^Stack trace:',
     ],
-
-    /** 后台中间件的名称,false代表不做任何权限 */
-    'middleware'=>false
 
 ];

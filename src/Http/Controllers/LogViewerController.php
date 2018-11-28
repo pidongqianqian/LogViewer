@@ -209,14 +209,16 @@ class LogViewerController extends Controller
     {
         $data = collect($data);
         $page = $request->get('page', 1);
-        $url  = $request->url();
-
+        $path  = $request->url();
+        if ($request->input('f')) {
+            $path .= '?f='. $request->input('f');
+        };
         return new LengthAwarePaginator(
             $data->forPage($page, $this->perPage),
             $data->count(),
             $this->perPage,
             $page,
-            compact('url')
+            compact('path')
         );
     }
 
@@ -300,6 +302,6 @@ class LogViewerController extends Controller
         foreach ($files as $file){
             $folders[basename($file)] = $file;
         }
-        return view('vendor.log-viewer.folder',compact('folders'));
+        return view('log-viewer::folder',compact('folders'));
     }
 }
