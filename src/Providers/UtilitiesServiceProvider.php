@@ -106,12 +106,18 @@ class UtilitiesServiceProvider extends ServiceProvider
             $storagePath = request('f')
                 ? base64_decode(request('f'))
                 : $config->get('log-viewer.storage-path');
-            $pathArr = explode('/', $storagePath);
 
+            $pathArr = explode('/', $storagePath);
             $patternAll = $config->get('log-viewer.pattern', []);
-            $pattern = end($pathArr) && isset($patternAll[end($pathArr)])
-                ? $patternAll[end($pathArr)]
-                : $patternAll['default'];
+            $pattern = $patternAll['default'];
+
+            if (end($pathArr) && isset($patternAll[end($pathArr)])) {
+                $pattern = $patternAll[end($pathArr)];
+                $storagePath = isset($patternAll[end($pathArr)]['storage-path'])
+                    ? $patternAll[end($pathArr)]['storage-path']
+                    : $storagePath;
+            }
+
             $filesystem = new Utilities\Filesystem($files, $storagePath);
 
             $filesystem->setPattern(

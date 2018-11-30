@@ -344,4 +344,9 @@ class LogViewer implements LogViewerContract
     {
         return self::VERSION;
     }
+
+    public function folderPath()
+    {
+        return $this->filesystem->folderPath();
+    }
 }

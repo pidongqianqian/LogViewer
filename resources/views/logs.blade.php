@@ -4,7 +4,7 @@
     <h1 class="page-header">
         @if(isset($_GET['f']))
             <div class="alert alert-success" role="alert" style="font-size: 20px;">
-                {{ base64_decode($_GET['f']) }}
+                {{ $folderPath }}
             </div>
         @else
             <div class="alert alert-success" role="alert" style="font-size: 20px;">
@@ -44,7 +44,7 @@
                                 @elseif ($value == 0)
                                     <span class="level level-empty">{{ $value }}</span>
                                 @else
-                                    <a href="{{ route('log-viewer::logs.filter', [$date, $key]) }}">
+                                    <a href="{{ route('log-viewer::logs.filter', [$date, $key]) }}@if(isset($_GET['f'])){{'?f='.$_GET['f']}}@endif">
                                         <span class="level level-{{ $key }}">{{ $value }}</span>
                                     </a>
                                 @endif
@@ -81,7 +81,7 @@
     {{-- DELETE MODAL --}}
     <div id="delete-log-modal" class="modal fade">
         <div class="modal-dialog">
-            <form id="delete-log-form" action="{{ route('log-viewer::logs.delete') }}" method="POST">
+            <form id="delete-log-form" action="{{ route('log-viewer::logs.delete') }}@if(isset($_GET['f'])){{'?f='.$_GET['f']}}@endif" method="POST">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="date" value="">

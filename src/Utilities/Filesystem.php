@@ -275,6 +275,16 @@ class Filesystem implements FilesystemContract
     }
 
     /**
+     * Get the log folder path.
+     *
+     * @return string
+     */
+    public function folderPath()
+    {
+        return $this->storagePath;
+    }
+
+    /**
      * Get the log file name.
      *
      * @param  string  $date

@@ -80,6 +80,15 @@ class LogParser
             unset($trash);
         }
 
+        //pidong
+        if(config('log-viewer.view-other-log')) {
+            $headings = [$headings[0]];
+            if(isset($headings[0]) && empty($headings[0][0])) {
+                $headings[0][] = "click button 'Stack' in right to view more";
+            }
+        }
+        //pidong
+
         return [$headings, $data];
     }
 
@@ -100,6 +109,17 @@ class LogParser
                     'stack'  => $data[$key]
                 ];
             }
+            //pidong
+            else {
+                if (config('log-viewer.view-other-log') && isset($data[$key]) && $level === 'info') {
+                    self::$parsed[] = [
+                        'level'  => 'info',
+                        'header' => $heading[$key],
+                        'stack'  => $data[$key]
+                    ];
+                }
+            }
+            //pidong
         }
     }
 

@@ -80,7 +80,9 @@ class LogEntry implements Arrayable, Jsonable, JsonSerializable
      */
     private function setHeader($header)
     {
-        $this->setDatetime($this->extractDatetime($header));
+        if ($this->checkDatetime($datetime = $this->extractDatetime($header))) {
+            $this->setDatetime($datetime);
+        }
 
         $header = $this->cleanHeader($header);
 
@@ -106,6 +108,18 @@ class LogEntry implements Arrayable, Jsonable, JsonSerializable
         $this->env = head(explode('.', $env));
 
         return $this;
+    }
+
+    /**
+     * check the entry date time.
+     *
+     * @param  string  $datetime
+     *
+     * @return bool
+     */
+    private function checkDatetime($datetime)
+    {
+        return $datetime === date('Y-m-d H:i:s', strtotime($datetime));
     }
 
     /**

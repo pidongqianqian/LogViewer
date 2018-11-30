@@ -134,4 +134,6 @@ interface Filesystem extends Patternable
      * @return string
      */
     public function filename($date);
+
+    public function folderPath();
 }

@@ -189,4 +189,6 @@ interface LogViewer extends Patternable
      * @return string
      */
     public function version();
+
+    public function folderPath();
 }

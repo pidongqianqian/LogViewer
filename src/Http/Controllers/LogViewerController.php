@@ -83,8 +83,8 @@ class LogViewerController extends Controller
         $stats   = $this->logViewer->statsTable();
         $headers = $stats->header();
         $rows    = $this->paginate($stats->rows(), $request);
-
-        return $this->view('logs', compact('headers', 'rows', 'footer'));
+        $folderPath = $this->logViewer->folderPath();
+        return $this->view('logs', compact('headers', 'rows', 'footer', 'folderPath'));
     }
 
     /**
@@ -115,8 +115,13 @@ class LogViewerController extends Controller
     {
         $log = $this->getLogOrFail($date);
 
-        if ($level === 'all')
-            return redirect()->route($this->showRoute, [$date]);
+        if ($level === 'all') {
+            $parameters = [$date];
+            if(request('f')) {
+                $parameters['f'] = request('f');
+            }
+            return redirect()->route($this->showRoute, $parameters);
+        }
 
         $levels  = $this->logViewer->levelsNames();
         $entries = $this->logViewer->entries($date, $level)->paginate($this->perPage);

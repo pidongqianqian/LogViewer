@@ -16,17 +16,18 @@ return [
      | -----------------------------------------------------------------
      */
 
-    'pattern'       => [
+    'pattern' => [
         'default' => [
             'prefix'    => Filesystem::PATTERN_PREFIX,    // 'laravel-'
             'date'      => Filesystem::PATTERN_DATE,      // '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
             'extension' => Filesystem::PATTERN_EXTENSION, // '.log'
         ],
-        'ftp'  => [
-            'prefix'    => 'ftp-',    // 'laravel-'
-            'date'      => Filesystem::PATTERN_DATE,      // '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
-            'extension' => Filesystem::PATTERN_EXTENSION, // '.log'
-        ]
+        'ftp'     => [
+            'prefix'       => 'ftp-',    // 'laravel-'
+            'date'         => Filesystem::PATTERN_DATE,      // '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]'
+            'extension'    => Filesystem::PATTERN_EXTENSION, // '.log'
+            'storage-path' => null,//absolute path
+        ],
     ],
 
     /* -----------------------------------------------------------------
@@ -142,4 +143,7 @@ return [
         '^Stack trace:',
     ],
 
+    'middleware' => '', // ''|['','']
+
+    'view-other-log' => false, // view every log content even if one of them is not 'laravel' log
 ];

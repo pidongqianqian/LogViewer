@@ -79,7 +79,7 @@
                                 </td>
                                 <td>
                                         <span class="label label-default">
-                                            {{ $entry->datetime->format('H:i:s') }}
+                                            {{ isset($entry->datetime) ? $entry->datetime->format('H:i:s') : 'invalid' }}
                                         </span>
                                 </td>
                                 <td>
@@ -125,7 +125,7 @@
     {{-- DELETE MODAL --}}
     <div id="delete-log-modal" class="modal fade">
         <div class="modal-dialog">
-            <form id="delete-log-form" action="{{ route('log-viewer::logs.delete') }}" method="POST">
+            <form id="delete-log-form" action="{{ route('log-viewer::logs.delete') }}@if(isset($_GET['f'])){{'?f='.$_GET['f']}}@endif" method="POST">
                 <input type="hidden" name="_method" value="DELETE">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="date" value="{{ $log->date }}">
