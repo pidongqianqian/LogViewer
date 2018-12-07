@@ -84,7 +84,12 @@ class LogParser
         if(config('log-viewer.view-other-log')) {
             $headings = [$headings[0]];
             if(isset($headings[0]) && empty($headings[0][0])) {
-                $headings[0][] = "click button 'Stack' in right to view more";
+                if (count($data) < 1) {
+                    $data[] = $raw;
+                    $headings[0][] = $raw;
+                } else {
+                    $headings[0][] = "Click the button 'Stack' on the right to view the contents of the log";
+                }
             }
         }
         //pidong

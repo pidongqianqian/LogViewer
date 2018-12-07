@@ -229,9 +229,16 @@ class Filesystem implements FilesystemContract
     public function read($date)
     {
         try {
-            $log = $this->filesystem->get(
-                $this->getLogPath($date)
-            );
+            //pidong
+            $path = $this->getLogPath($date);
+            if ($this->filesystem->isFile($path) && filesize($path) > 1024*1024*5) {
+                $log = 'The log is too large to load in browser('. round(filesize($path)/1024/1024, 2) . 'MB), please download to view';
+            }else {
+                $log = $this->filesystem->get(
+                    $this->getLogPath($date)
+                );
+            }
+            //pidong
         }
         catch (\Exception $e) {
             throw new FilesystemException($e->getMessage());
